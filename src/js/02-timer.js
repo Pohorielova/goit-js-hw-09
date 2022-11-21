@@ -2,17 +2,8 @@ import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
 
-// Подсчет даты
-// Количество дней может состоять из более чем двух цифр.
-// Таймер должен останавливаться когда дошел до конечной даты, то есть 00:00:00:00.
-
-
-  // console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-  // console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-  // console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
-
 const datePicker = document.querySelector('#datetime-picker');
-
+const timerhtml = document.querySelector('.timer');
 const startBtn = document.querySelector('[data-start]');
 const daysField=document.querySelector('[data-days]');
 const hoursField=document.querySelector('[data-hours]');
@@ -20,7 +11,7 @@ const minutesField=document.querySelector('[data-minutes]');
 const secondsField=document.querySelector('[data-seconds]');
 let intervalId = null;
 let targetData = null;
-let leftTime = 0;
+
 startBtn.disabled = true;
 
 const options = {
@@ -39,8 +30,6 @@ const options = {
     startBtn.addEventListener('click', ()=>{
       timer.start();
       });
-
- 
   },
 
   };
@@ -56,10 +45,14 @@ const timer ={
       intervalId=setInterval(() => {
             const deltaTime =targetData.getTime() - Date.now();;
             const time =convertMs(deltaTime);
-            if (leftTime >= 0) {
+            if (deltaTime >= 0) {
+              timerhtml.style.color='tomato';
               updateClock(time);
+            } else{
+              timerhtml.style.color='black';
+               clearInterval(intervalId);
             }
-              // clearInterval(intervalId);
+
         }, 1000);
         startBtn.disabled = true;
     },
